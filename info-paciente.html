@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Info - Acceso Pacientes</title>
+    <style>
+        /* Estilos CSS para esta página de información */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3, h4 {
+            color: #0056b3;
+            text-align: center;
+        }
+        #login-section, #info-paciente {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        #info-paciente {
+            background-color: #e6ffe6; /* Un verde claro para la sección de info */
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #loginForm button[type="submit"] { /* Estilo para el botón de login */
+            background-color: #28a745;
+        }
+        #loginForm button[type="submit"]:hover {
+            background-color: #218838;
+        }
+        #btnLogout { /* Estilo para el botón de cerrar sesión */
+            background-color: #dc3545;
+        }
+        #btnLogout:hover {
+            background-color: #c82333;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+        ul {
+            list-style: disc;
+            margin-left: 20px;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .back-button {
+            display: block; /* Para que ocupe toda la línea */
+            width: fit-content; /* Se ajusta al contenido */
+            margin: 20px auto 0 auto; /* Centra el botón abajo */
+            padding: 10px 20px;
+            background-color: #6c757d; /* Gris para el botón de volver */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Acceso a la Información del Paciente</h1>
+
+        <div id="login-section">
+            <h2>Ingresa con tu Usuario y Contraseña</h2>
+            <form id="loginForm">
+                <label for="username">Usuario:</label><br>
+                <input type="text" id="username" name="username" required><br><br>
+                <label for="password">Contraseña:</label><br>
+                <input type="password" id="password" name="password" required><br><br>
+                <button type="submit">Ingresar</button>
+                <p id="loginMessage" class="error-message"></p>
+            </form>
+        </div>
+
+        <div id="info-paciente">
+            <h2>Tus Datos Personales</h2>
+            <p>Aquí verás tus citas médicas y problemas de salud registrados en el sistema.</p>
+            <div id="paciente-data">
+                </div>
+            <button id="btnLogout">Cerrar Sesión</button>
+        </div>
+
+        <a href="index.html" class="back-button">Volver al Inicio</a>
+    </div>
+
+    <script>
+        // --- Base de datos de pacientes (SOLO PARA PROYECTO - ¡NO ES SEGURO PARA USO REAL!) ---
+        const pacientes = {
+            "juanperez": {
+                password: "mipass123",
+                nombre: "Juan Pérez",
+                citas: [
+                    "10/07/2025 - 10:00 AM - Dr. García (Clínico)",
+                    "25/07/2025 - 15:30 PM - Dra. López (Dermatología)"
+                ],
+                problemas: [
+                    "Dolor de cabeza ocasional",
+                    "Alergia a la penicilina"
+                ]
+            },
+            "mariasol": {
+                password: "clavemaria",
+                nombre: "María Sol Rodríguez",
+                citas: [
+                    "15/07/2025 - 09:00 AM - Dr. Fernández (Pediatría)",
+                    "01/08/2025 - 11:00 AM - Nutricionista (Control)"
+                ],
+                problemas: [
+                    "Asma infantil (control anual)",
+                    "Deficiencia de Vitamina D"
+                ]
+            },
+            "pedrog": {
+                password: "clavepedro",
+                nombre: "Pedro González",
+                citas: [
+                    "05/07/2025 - 14:00 PM - Laboratorio (Análisis de sangre)"
+                ],
+                problemas: [
+                    "Hipertensión arterial (medicación)",
+                    "Diabetes Tipo 2"
+                ]
+            }
+            // Puedes agregar más usuarios aquí con su información
+        };
+
+        // --- Obtener elementos de la página ---
+        const loginSection = document.getElementById('login-section');
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginMessage = document.getElementById('loginMessage');
+        const infoPacienteDiv = document.getElementById('info-paciente');
+        const pacienteDataDiv = document.getElementById('paciente-data');
+        const btnLogout = document.getElementById('btnLogout');
+
+        // --- Lógica al enviar el formulario de login ---
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Evita que la página se recargue
+
+            const user = usernameInput.value.toLowerCase().trim(); // Usuario en minúsculas y sin espacios
+            const pass = passwordInput.value.trim(); // Contraseña sin espacios
+
+            // Comprobar si el usuario existe y la contraseña coincide
+            if (pacientes[user] && pacientes[user].password === pass) {
+                // Credenciales correctas
+                loginSection.style.display = 'none'; // Ocultar el formulario de login
+                infoPacienteDiv.style.display = 'block'; // Mostrar la sección de información
+
+                mostrarInfoPaciente(pacientes[user]); // Cargar y mostrar los datos del paciente
+                loginMessage.textContent = ''; // Limpiar cualquier mensaje de error
+            } else {
+                // Credenciales incorrectas
+                loginMessage.textContent = 'Usuario o contraseña incorrectos.';
+            }
+        });
+
+        // --- Función para cargar y mostrar la información del paciente ---
+        function mostrarInfoPaciente(paciente) {
+            pacienteDataDiv.innerHTML = `
+                <h3>¡Hola, ${paciente.nombre}!</h3>
+
+                <h4>Tus Próximas Citas:</h4>
+                ${paciente.citas.length > 0 ?
+                    `<ul>${paciente.citas.map(cita => `<li>${cita}</li>`).join('')}</ul>` :
+                    '<p>No tienes citas programadas en este momento.</p>'
+                }
+
+                <h4>Tus Problemas de Salud (Registrados):</h4>
+                ${paciente.problemas.length > 0 ?
+                    `<ul>${paciente.problemas.map(problema => `<li>${problema}</li>`).join('')}</ul>` :
+                    '<p>No hay problemas de salud registrados.</p>'
+                }
+            `;
+        }
+
+        // --- Lógica del botón "Cerrar Sesión" ---
+        btnLogout.addEventListener('click', () => {
+            infoPacienteDiv.style.display = 'none'; // Ocultar la información del paciente
+            loginSection.style.display = 'block'; // Mostrar de nuevo el formulario de login
+            pacienteDataDiv.innerHTML = ''; // Limpiar los datos del paciente que se estaban mostrando
+            usernameInput.value = ''; // Limpiar los campos del formulario
+            passwordInput.value = '';
+            loginMessage.textContent = 'Sesión cerrada correctamente.'; // Mostrar un mensaje
+        });
+
+        // --- Al cargar la página, ocultar la sección de información del paciente por defecto ---
+        document.addEventListener('DOMContentLoaded', () => {
+            infoPacienteDiv.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>

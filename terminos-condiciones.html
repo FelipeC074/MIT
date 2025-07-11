@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIT - Términos y Condiciones</title>
+    <style>
+        /* Variables CSS para paleta de colores - Adaptadas al nuevo logo */
+        :root {
+            /* Tema Claro por defecto */
+            --color-primary: #0A4A82; /* Azul marino del logo */
+            --color-secondary: #F8F8F8; /* Gris muy claro para fondos de sección */
+            --color-tertiary: #E8E8E8; /* Gris un poco más oscuro */
+            --color-accent: #007BFF; /* Azul brillante para acentos y botones */
+            --color-accent-hover: #0056b3; /* Azul más oscuro al pasar el mouse */
+            --color-text-dark: #333;
+            --color-text-light: #fff;
+            --color-border: #D0D0D0;
+            --header-bg: var(--color-primary);
+            --footer-bg: var(--color-primary);
+        }
+
+        /* Variables para Modo Oscuro */
+        body.dark-mode {
+            --color-primary: #1C3D5A; /* Azul más oscuro para fondo principal */
+            --color-secondary: #2C2C2C; /* Gris oscuro para fondos de sección */
+            --color-tertiary: #444444; /* Gris más oscuro */
+            --color-accent: #66B3FF; /* Azul brillante para acentos en oscuro */
+            --color-accent-hover: #3D8EE6;
+            --color-text-dark: #E0E0E0; /* Texto claro */
+            --color-text-light: #222; /* Texto oscuro en elementos claros */
+            --color-border: #555555;
+            --header-bg: #111; /* Fondo del header en modo oscuro */
+            --footer-bg: #111; /* Fondo del footer en modo oscuro */
+            background-color: #222; /* Fondo del body en modo oscuro */
+        }
+
+
+        /* --- Keyframe Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        /* Estilos Generales y Reset Básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text-dark);
+            background-color: var(--color-text-light);
+            scroll-behavior: smooth;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--color-primary);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- Header (Encabezado Superior) --- */
+        .header {
+            background-color: var(--header-bg); /* Usa la variable para el fondo */
+            color: var(--color-text-light);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header .logo img {
+            height: 50px; /* Ajusta el tamaño del logo */
+            animation: bounceIn 1s ease-out; /* Animación para el logo */
+            transition: filter 0.5s ease; /* Para ajustar el logo en modo oscuro si es blanco */
+        }
+        
+        /* Opcional: Si el logo es oscuro y quieres invertirlo en modo oscuro */
+        body.dark-mode .header .logo img {
+            filter: invert(1) hue-rotate(180deg) brightness(1.2); /* Esto puede hacer que un logo oscuro se vea más claro */
+        }
+
+
+        .header .navbar ul {
+            display: flex;
+            gap: 25px;
+        }
+
+        .header .navbar a {
+            color: var(--color-text-light);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 5px 0;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        .header .navbar a:hover {
+            color: var(--color-accent); /* Color de acento al pasar el mouse */
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .header .right-elements {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .contact-info-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .header .contact-info-header span {
+            color: var(--color-text-light);
+        }
+
+        .header .contact-info-header .button-contact {
+            background-color: var(--color-accent); /* Azul brillante */
+            color: var(--color-text-light);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        .header .contact-info-header .button-contact:hover {
+            background-color: var(--color-accent-hover);
+        }
+        
+        /* Botón Modo Oscuro/Claro */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--color-text-light);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .theme-toggle:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        body.dark-mode .theme-toggle {
+            color: var(--color-accent); /* Cambia el color del icono en modo oscuro */
+        }
+
+        /* --- Secciones de Contenido General (ajustadas para páginas internas) --- */
+        .section-content {
+            padding: 90px 0; /* Padding estándar */
+            text-align: center;
+            background-color: var(--color-secondary);
+            margin-bottom: 0;
+            padding-top: 150px; /* Ajuste para el header fijo en páginas internas */
+            transition: background-color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+        /* Para que no siempre sea el mismo color de fondo si tienes varias secciones */
+        .section-content:nth-of-type(odd) {
+             background-color: var(--color-secondary);
+        }
+        .section-content:nth-of-type(even) {
+            background-color: var(--color-text-light);
+        }
+        body.dark-mode .section-content:nth-of-type(even) {
+            background-color: var(--color-primary); /* Azul oscuro en modo oscuro */
+        }
+
+
+        .section-content h2 {
+            font-size: 45px;
+            margin-bottom: 40px;
+            color: var(--color-primary);
+            position: relative;
+            padding-bottom: 10px;
+            animation: fadeIn 1s ease-out;
+            transition: color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        .section-content h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--color-accent);
+            border-radius: 2px;
+            transition: background-color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        .section-content p {
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto 25px;
+            animation: fadeIn 1.2s ease-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: backwards;
+            transition: color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        /* Estilos específicos para páginas de política/términos */
+        .policy-section {
+            background-color: var(--color-text-light);
+            text-align: left; /* Alineación del texto a la izquierda */
+        }
+        .policy-content h3 {
+            color: var(--color-primary);
+            font-size: 28px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+        .policy-content h4 {
+            color: var(--color-primary);
+            font-size: 22px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            transition: color 0.5s ease;
+        }
+        .policy-content p, .policy-content ul, .policy-content ol {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--color-text-dark);
+            transition: color 0.5s ease;
+        }
+        .policy-content ul {
+            list-style: disc;
+            margin-left: 25px;
+            padding-left: 0;
+        }
+        .policy-content ol {
+            list-style: decimal;
+            margin-left: 25px;
+            padding-left: 0;
+        }
+        .policy-content ul li, .policy-content ol li {
+            margin-bottom: 8px;
+        }
+
+        /* --- Footer (Pie de página) --- */
+        .footer {
+            background-color: var(--footer-bg);
+            color: var(--color-text-light);
+            padding: 40px 0;
+            text-align: center;
+            font-size: 15px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        .footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 25px;
+        }
+
+        .footer-links ul {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .footer-links a {
+            color: var(--color-text-light);
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-tertiary);
+        }
+
+        .social-icons-footer {
+            margin-bottom: 20px;
+        }
+
+        .social-icons-footer a {
+            color: var(--color-text-light);
+            font-size: 26px;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons-footer a:hover {
+            color: var(--color-tertiary);
+        }
+
+        .footer p {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .header .container {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            .header .navbar ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px 20px;
+            }
+            .header .right-elements {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .header .contact-info-header {
+                flex-grow: 1; /* Permite que ocupe más espacio */
+                justify-content: center;
+            }
+            .section-content h2 {
+                font-size: 38px;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .footer-links ul {
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header .navbar {
+                width: 100%;
+                order: 3;
+                margin-top: 10px;
+            }
+            .header .right-elements {
+                order: 2;
+                margin-top: 0;
+            }
+            .header .logo {
+                order: 1;
+            }
+            .section-content {
+                padding: 70px 0;
+            }
+            .section-content h2 {
+                font-size: 32px;
+                margin-bottom: 30px;
+            }
+            .policy-content h3 {
+                font-size: 24px;
+            }
+            .policy-content h4 {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header .logo img {
+                height: 40px;
+            }
+            .header .navbar ul {
+                gap: 10px;
+            }
+            .header .contact-info-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .section-content h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="mit-logo.png" alt="MIT Centro Médico Logo">
+                </a>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#quienes-somos">Quiénes Somos</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="laboratorio.html">Laboratorio</a></li>
+                    <li><a href="profesionales.html">Profesionales</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="estudios-online.html">Estudios Online</a></li>
+                </ul>
+            </nav>
+            <div class="right-elements">
+                <div class="contact-info-header">
+                    <span class="email-header">info@mitcentro.com.ar</span>
+                    <span class="phone-header">+54 0954 123456</span>
+                    <a href="contacto.html" class="button-contact">Contacto</a>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Alternar modo oscuro/claro">
+                    ☀️
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="terminos-condiciones" class="section-content policy-section">
+            <div class="container policy-content">
+                <h2>Términos y Condiciones de Uso de MIT Centro Médico</h2>
+                <p><strong>Fecha de última actualización:</strong> 2 de julio de 2025</p>
+
+                <p>Bienvenido al sitio web de MIT Centro Médico. Al acceder y utilizar nuestro sitio web y nuestros servicios, usted acepta estar sujeto a los siguientes términos y condiciones de uso. Lea atentamente estos términos antes de utilizar nuestros servicios. Si no está de acuerdo con alguno de estos términos, no utilice nuestro sitio web.</p>
+
+                <h3>1. Aceptación de los Términos</h3>
+                <p>El acceso y el uso de este sitio web están condicionados a su aceptación y cumplimiento de estos Términos y Condiciones. Estos Términos se aplican a todos los visitantes, usuarios y otras personas que acceden o utilizan el Servicio.</p>
+
+                <h3>2. Uso del Sitio Web</h3>
+                <ul>
+                    <li>Este sitio web es solo para fines informativos y de contacto. No debe utilizarse para diagnósticos, tratamientos o consejos médicos de emergencia. Siempre consulte a un profesional de la salud calificado.</li>
+                    <li>Usted se compromete a utilizar el sitio de manera responsable y de acuerdo con las leyes aplicables.</li>
+                    <li>Queda prohibido cualquier uso del sitio web que pueda dañar, deshabilitar, sobrecargar o perjudicar nuestros servidores o redes, o interferir con el uso y disfrute del sitio por parte de terceros.</li>
+                </ul>
+
+                <h3>3. Información Médica y Privacidad</h3>
+                <ul>
+                    <li>La información proporcionada en este sitio web no pretende reemplazar el asesoramiento médico profesional, el diagnóstico o el tratamiento.</li>
+                    <li>Su privacidad es muy importante para nosotros. Nuestra Política de Privacidad, que también rige su visita a nuestro sitio, explica cómo recopilamos, usamos y protegemos su información personal. Al usar este sitio, usted acepta las prácticas descritas en nuestra Política de Privacidad.</li>
+                </ul>
+
+                <h3>4. Propiedad Intelectual</h3>
+                <ul>
+                    <li>Todo el contenido de este sitio web, incluidos textos, gráficos, logotipos, iconos, imágenes, clips de audio, descargas digitales y compilaciones de datos, es propiedad de MIT Centro Médico o de sus proveedores de contenido y está protegido por las leyes de derechos de autor y otras leyes de propiedad intelectual.</li>
+                    <li>No puede reproducir, duplicar, copiar, vender, revender o explotar ninguna parte del Servicio, el uso del Servicio o el acceso al Servicio sin nuestro permiso expreso por escrito.</li>
+                </ul>
+
+                <h3>5. Enlaces a Otros Sitios Web</h3>
+                <ul>
+                    <li>Nuestro sitio web puede contener enlaces a sitios web o servicios de terceros que no son propiedad ni están controlados por MIT Centro Médico.</li>
+                    <li>No tenemos control sobre, y no asumimos ninguna responsabilidad por el contenido, las políticas de privacidad o las prácticas de sitios web o servicios de terceros. Usted reconoce y acepta que MIT Centro Médico no será responsable, directa o indirectamente, de ningún daño o pérdida causada o supuestamente causada por o en conexión con el uso o la dependencia de dicho contenido, bienes o servicios disponibles en o a través de dichos sitios web o servicios.</li>
+                </ul>
+
+                <h3>6. Limitación de Responsabilidad</h3>
+                <ul>
+                    <li>En la máxima medida permitida por la ley aplicable, MIT Centro Médico no será responsable de ningún daño directo, indirecto, incidental, especial, consecuente o punitivo, incluyendo, entre otros, la pérdida de beneficios, datos, uso, fondo de comercio u otras pérdidas intangibles, resultantes de (i) su acceso o uso o imposibilidad de acceder o usar el Servicio; (ii) cualquier conducta o contenido de terceros en el Servicio; (iii) cualquier contenido obtenido del Servicio; y (iv) el acceso, uso o alteración no autorizados de sus transmisiones o contenido, ya sea basado en garantía, contrato, agravio (incluida negligencia) o cualquier otra teoría legal, hayamos sido o no informados de la posibilidad de tales daños.</li>
+                </ul>
+
+                <h3>7. Modificaciones de los Términos</h3>
+                <p>Nos reservamos el derecho, a nuestra entera discreción, de modificar o reemplazar estos Términos en cualquier momento. Si una revisión es material, intentaremos proporcionar un aviso de al menos 30 días antes de que los nuevos términos entren en vigor. Lo que constituye un cambio material se determinará a nuestra entera discreción. Al continuar accediendo o utilizando nuestro Servicio después de que esas revisiones se hagan efectivas, usted acepta estar sujeto a los términos revisados. Si no está de acuerdo con los nuevos términos, por favor, deje de usar el Servicio.</p>
+
+                <h3>8. Ley Aplicable y Jurisdicción</h3>
+                <p>Estos Términos se regirán e interpretarán de acuerdo con las leyes de la República Argentina, sin tener en cuenta sus disposiciones sobre conflictos de leyes. Cualquier disputa que surja en relación con estos Términos estará sujeta a la jurisdicción exclusiva de los tribunales de la Ciudad de Santa Rosa, La Pampa, Argentina.</p>
+
+                <h3>9. Contacto</h3>
+                <p>Si tiene alguna pregunta sobre estos Términos y Condiciones, por favor contáctenos:</p>
+                <p>
+                    <strong>MIT Centro Médico</strong><br>
+                    Dirección: Emilio Civit 345, Santa Rosa, La Pampa, Argentina<br>
+                    Teléfono: +54 0954 123456<br>
+                    Email: info@mitcentro.com.ar
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#quienes-somos">Quiénes Somos</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="laboratorio.html">Laboratorio</a></li>
+                    <li><a href="profesionales.html">Profesionales</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="estudios-online.html">Estudios Online</a></li>
+                </ul>
+                <ul>
+                    <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
+                    <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                    <li><a href="#">Aviso Legal</a></li>
+                </ul>
+            </div>
+            <div class="social-icons-footer">
+            </div>
+            <p>© 2025 MIT Centro Médico. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para el Modo Oscuro/Claro
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.classList.add(savedTheme);
+            if (savedTheme === 'dark-mode') {
+                themeToggle.textContent = '🌙';
+            } else {
+                themeToggle.textContent = '☀️';
+            }
+        } else {
+            body.classList.remove('dark-mode');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark-mode');
+                themeToggle.textContent = '🌙';
+            } else {
+                localStorage.setItem('theme', 'light-mode');
+                themeToggle.textContent = '☀️';
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,
+initial-scale=1.0">
+    <title>MIT - Centro Médico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Variables CSS para paleta de colores - Adaptadas al
+nuevo logo */
+        :root {
+            /* Tema Claro por defecto */
+            --color-primary: #0A4A82; /*
+Azul marino del logo */
+            --color-secondary: #F8F8F8; /*
+Gris muy claro para fondos de sección */
+            --color-tertiary: #E8E8E8; /*
+Gris un poco más oscuro */
+            --color-accent: #007BFF; /* Azul brillante para
+acentos y botones */
+            --color-accent-hover: #0056b3; /*
+Azul más oscuro al pasar el mouse */
+            --color-text-dark: #333;
+            --color-text-light: #fff;
+            --color-border: #D0D0D0;
+            --header-bg: var(--color-primary);
+            --footer-bg: var(--color-primary);
+        }
+
+        /* Variables para Modo Oscuro */
+        body.dark-mode {
+            --color-primary: #1C3D5A; /*
+Azul más oscuro para fondo principal */
+            --color-secondary: #2C2C2C; /*
+Gris oscuro para fondos de sección */
+            --color-tertiary: #444444; /*
+Gris más oscuro */
+            --color-accent: #66B3FF; /* Azul brillante para
+acentos en oscuro */
+            --color-accent-hover: #3D8EE6;
+            --color-text-dark: #E0E0E0; /*
+Texto claro */
+            --color-text-light: #222; /*
+Texto oscuro en elementos claros */
+            --color-border: #555555;
+            --header-bg: #111; /* Fondo del header en
+modo oscuro */
+            --footer-bg: #111; /* Fondo del footer en
+modo oscuro */
+            background-color: #222; /*
+Fondo del body en modo oscuro */
+        }
+
+        /* --- Keyframe Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100%
+{ transform: scale(1); }
+        }
+
+        /* Estilos Generales y Reset Básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text-dark);
+            background-color: var(--color-text-light);
+            scroll-behavior: smooth;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Transición para modo
+oscuro/claro */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--color-primary);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- Header (Encabezado Superior) --- */
+        .header {
+            background-color: var(--header-bg); /* Usa la variable para
+el fondo */
+            color: var(--color-text-light);
+            padding: 10px 0; /*
+AJUSTADO: Reducido para "pegar" más el logo */
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header .logo img {
+            height: 70px; /* AJUSTADO: Aumentado el tamaño del logo en el header */
+            animation: bounceIn 1s ease-out; /* Animación para el logo
+*/
+            transition: filter 0.5s ease; /* Para ajustar el logo
+en modo oscuro si es blanco */
+        }
+        
+        /* Opcional: Si el logo es oscuro y quieres invertirlo en
+modo oscuro */
+        body.dark-mode .header .logo img {
+            filter: invert(1) hue-rotate(180deg) brightness(1.2); /* Esto puede hacer que un logo oscuro se vea más claro
+*/
+        }
+
+        .header .navbar ul {
+            display: flex;
+            gap: 25px;
+        }
+
+        .header .navbar a {
+            color: var(--color-text-light);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 5px 0;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        .header .navbar a:hover {
+            color: var(--color-accent); /* Color de acento al pasar el mouse */
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .header .right-elements {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .contact-info-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .header .contact-info-header span {
+            color: var(--color-text-light);
+        }
+
+        .header .contact-info-header .button-contact {
+            background-color: var(--color-accent); /* Azul brillante */
+            color: var(--color-text-light);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        .header .contact-info-header .button-contact:hover {
+            background-color: var(--color-accent-hover);
+        }
+        
+        /* Botón Modo Oscuro/Claro */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--color-text-light);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .theme-toggle:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        body.dark-mode .theme-toggle {
+            color: var(--color-accent); /*
+Cambia el color del icono en modo oscuro */
+        }
+
+        /* --- Secciones de Contenido General (ajustadas para
+páginas internas) --- */
+        .section-content {
+            padding: 90px 0; /* Padding estándar */
+            text-align: center;
+            background-color: var(--color-secondary);
+            margin-bottom: 0;
+            padding-top: 150px; /* Ajuste para el header
+fijo en páginas internas */
+            transition: background-color 0.5s ease; /* Transición para modo
+oscuro/claro */
+        }
+        /* Para que no siempre sea el mismo color de fondo si
+tienes varias secciones */
+        .section-content:nth-of-type(odd) {
+             background-color: var(--color-secondary);
+        }
+        .section-content:nth-of-type(even) {
+            background-color: var(--color-text-light);
+        }
+        body.dark-mode .section-content:nth-of-type(even) {
+            background-color: var(--color-primary); /* Azul oscuro en modo oscuro */
+        }
+
+        .section-content h2 {
+            font-size: 45px;
+            margin-bottom: 40px;
+            color: var(--color-primary);
+            position: relative;
+            padding-bottom: 10px;
+            animation: fadeIn 1s ease-out;
+            transition: color 0.5s ease; /*
+Transición para modo oscuro/claro */
+        }
+
+        .section-content h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--color-accent);
+            border-radius: 2px;
+            transition: background-color 0.5s ease; /* Transición para modo
+oscuro/claro */
+        }
+
+        .section-content p {
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto 25px;
+            animation: fadeIn 1.2s ease-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: backwards;
+            transition: color 0.5s ease; /*
+Transición para modo oscuro/claro */
+        }
+
+        /* Estilos específicos de la sección Hero (Portada) para
+el logo grande */
+        .hero-section {
+            background-color: var(--color-secondary); /* O un color de fondo
+diferente si lo deseas */
+            padding-top: 150px; /* Espacio para el header
+fijo */
+            padding-bottom: 80px;
+            text-align: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content .main-logo-hero {
+            max-width: 550px; /* AJUSTADO: Aumenta el
+tamaño máximo del logo principal */
+            height: auto;
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease-out;
+            /*
+Para que el logo siempre sea blanco */
+            filter: brightness(0) invert(1); 
+        }
+
+        .hero-content h1 {
+            font-size: 55px;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-out 0.3s backwards;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            max-width: 800px;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out 0.6s backwards;
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: var(--color-text-light);
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            display: inline-block; /* Para que el padding y
+margin funcionen bien */
+            animation: bounceIn 1s ease-out 0.9s backwards;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-accent-hover);
+        }
+
+        /* --- Footer (Pie de página) --- */
+        .footer {
+            background-color: var(--footer-bg);
+            color: var(--color-text-light);
+            padding: 40px 0;
+            text-align: center;
+            font-size: 15px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.5s ease; /* Transición para modo oscuro/claro */
+        }
+
+        .footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 25px;
+        }
+
+        .footer-links ul {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .footer-links a {
+            color: var(--color-text-light);
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-tertiary);
+        }
+
+        .social-icons-footer {
+            margin-bottom: 20px;
+            display: flex; /* Added to make social
+icons appear in a row */
+            gap: 15px; /* Spacing between social
+icons */
+        }
+
+        .social-icons-footer a {
+            color: var(--color-text-light);
+            font-size: 26px;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons-footer a:hover {
+            color: var(--color-tertiary);
+        }
+
+        .footer p {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .header .container {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            .header .navbar ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px 20px;
+            }
+            .header .right-elements {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .header .contact-info-header {
+                flex-grow: 1; /* Permite que ocupe más
+espacio */
+            justify-content: center;
+            }
+            .section-content h2 {
+                font-size: 38px;
+            }
+            .hero-content h1 {
+                font-size: 45px;
+            }
+            .hero-content .main-logo-hero {
+                max-width: 450px; /* AJUSTADO para
+pantallas medianas */
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .footer-links ul {
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header .navbar {
+                width: 100%;
+                order: 3;
+                margin-top: 10px;
+            }
+            .header .right-elements {
+                order: 2;
+                margin-top: 0;
+            }
+            .header .logo {
+                order: 1;
+            }
+            .header .logo img {
+                height: 60px; /* AJUSTADO */
+            }
+            .section-content {
+                padding: 70px 0;
+            }
+            .section-content h2 {
+                font-size: 32px;
+                margin-bottom: 30px;
+            }
+            .hero-content h1 {
+                font-size: 38px;
+            }
+            .hero-content .main-logo-hero {
+            max-width: 350px; /*
+AJUSTADO para pantallas pequeñas */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header .logo img {
+                height: 50px; /* AJUSTADO */
+            }
+            .header .navbar ul {
+                gap: 10px;
+            }
+            .header .contact-info-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .section-content h2 {
+                font-size: 28px;
+            }
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            .hero-content .main-logo-hero {
+            max-width: 280px; /*
+AJUSTADO para pantallas muy pequeñas */
+            }
+        }
+
+        /* --- Estilos específicos para la sección de Información del Paciente --- */
+        #info-paciente-section .patient-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: var(--color-text-light); /* Fondo claro en modo claro, oscuro en modo oscuro */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.5s ease;
+        }
+
+        body.dark-mode #info-paciente-section .patient-container {
+            background-color: var(--color-primary); /* Azul oscuro para el contenedor en modo oscuro */
+        }
+
+        #info-paciente-section h1,
+        #info-paciente-section h2,
+        #info-paciente-section h3,
+        #info-paciente-section h4 {
+            color: var(--color-primary); /* Usa el color primario del tema */
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        body.dark-mode #info-paciente-section h1,
+        body.dark-mode #info-paciente-section h2,
+        body.dark-mode #info-paciente-section h3,
+        body.dark-mode #info-paciente-section h4 {
+            color: var(--color-accent); /* Color de acento en modo oscuro para los títulos */
+        }
+
+        #info-paciente-section #login-section,
+        #info-paciente-section #info-paciente {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid var(--color-border); /* Borde consistente con el tema */
+            border-radius: 8px;
+            background-color: var(--color-secondary); /* Fondo secundario del tema */
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        body.dark-mode #info-paciente-section #login-section,
+        body.dark-mode #info-paciente-section #info-paciente {
+            background-color: var(--color-tertiary); /* Fondo más oscuro en modo oscuro */
+            border-color: var(--color-border);
+        }
+
+        #info-paciente-section #info-paciente {
+            background-color: #e6ffe6; /* Un verde claro para la sección de info */
+            color: var(--color-text-dark);
+        }
+
+        body.dark-mode #info-paciente-section #info-paciente {
+            background-color: #3d5a44; /* Verde oscuro para info en modo oscuro */
+            color: var(--color-text-dark); /* Texto claro */
+        }
+
+
+        #info-paciente-section input[type="text"],
+        #info-paciente-section input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: var(--color-text-light); /* Fondo del input */
+            color: var(--color-text-dark);
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+        body.dark-mode #info-paciente-section input[type="text"],
+        body.dark-mode #info-paciente-section input[type="password"] {
+            background-color: #333; /* Fondo de input oscuro */
+            color: var(--color-text-dark); /* Texto claro */
+            border-color: #666;
+        }
+
+        #info-paciente-section button {
+            padding: 10px 15px;
+            background-color: var(--color-accent);
+            color: var(--color-text-light);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        #info-paciente-section button:hover {
+            background-color: var(--color-accent-hover);
+        }
+
+        #info-paciente-section #loginForm button[type="submit"] {
+            background-color: #28a745;
+        }
+        #info-paciente-section #loginForm button[type="submit"]:hover {
+            background-color: #218838;
+        }
+        #info-paciente-section #btnLogout {
+            background-color: #dc3545;
+        }
+        #info-paciente-section #btnLogout:hover {
+            background-color: #c82333;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+        #info-paciente-section ul {
+            list-style: disc;
+            margin-left: 20px;
+            padding: 0;
+            text-align: left; /* Alinea los ítems de la lista a la izquierda */
+        }
+        #info-paciente-section li {
+            margin-bottom: 5px;
+            color: var(--color-text-dark);
+            transition: color 0.5s ease;
+        }
+        body.dark-mode #info-paciente-section li {
+             color: var(--color-text-dark); /* Texto claro */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="mit-logo.png" alt="MIT Centro Médico
+Logo">
+                </a>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#quienes-somos">Quiénes Somos</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="laboratorio.html">Laboratorio</a></li>
+                    <li><a href="profesionales.html">Profesionales</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="estudios-online.html">Estudios Online</a></li>
+                    <li><a href="#info-paciente-section">Información Paciente</a></li>
+                </ul>
+            </nav>
+            <div class="right-elements">
+                <div class="contact-info-header">
+                    <span class="email-header">info@mitcentro.com.ar</span>
+                    <span class="phone-header">+54 0954 123456</span>
+                    <a href="contacto.html" class="button-contact">Contacto</a>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Alternar modo
+oscuro/claro">
+                    <i class="fas fa-sun"></i> </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="container
+hero-content">
+                <img src="mit-logo.png" alt="MIT Centro Médico Logo Principal" class="main-logo-hero">
+                <h1>Tu Salud, Nuestra Prioridad.</h1>
+                <p>Ofrecemos atención médica integral y de
+calidad con un equipo de profesionales dedicados.</p>
+                <a href="contacto.html" class="btn-primary">Pide tu Cita Hoy</a>
+            </div>
+        </section>
+
+        <section id="quienes-somos" class="section-content">
+            <div class="container">
+                <h2>Quiénes Somos</h2>
+                <p>En MIT Centro Médico, nos dedicamos a
+brindar atención de salud integral y de alta calidad a nuestros pacientes.
+Contamos con un equipo de profesionales experimentados y tecnología de
+vanguardia para asegurar el mejor cuidado posible.</p>
+            </div>
+        </section>
+
+        <section id="info-paciente-section" class="section-content">
+            <div class="patient-container">
+                <h1>Acceso a la Información del Paciente</h1>
+
+                <div id="login-section">
+                    <h2>Ingresa con tu Usuario y Contraseña</h2>
+                    <form id="loginForm">
+                        <label for="username">Usuario:</label><br>
+                        <input type="text" id="username" name="username" required><br><br>
+                        <label for="password">Contraseña:</label><br>
+                        <input type="password" id="password" name="password" required><br><br>
+                        <button type="submit">Ingresar</button>
+                        <p id="loginMessage" class="error-message"></p>
+                    </form>
+                </div>
+
+                <div id="info-paciente">
+                    <h2>Tus Datos Personales</h2>
+                    <p>Aquí verás tus citas médicas y problemas de salud registrados en el sistema.</p>
+                    <div id="paciente-data">
+                        </div>
+                    <button id="btnLogout">Cerrar Sesión</button>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#quienes-somos">Quiénes Somos</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="laboratorio.html">Laboratorio</a></li>
+                    <li><a href="profesionales.html">Profesionales</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="estudios-online.html">Estudios Online</a></li>
+                    <li><a href="#info-paciente-section">Información Paciente</a></li> 
+                </ul>
+                <ul>
+                    <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
+                    <li><a href="aviso-legal.html">Aviso Legal</a></li>
+                    <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                </ul>
+            </div>
+            <div class="social-icons-footer">
+                <a href="#" aria-label="Facebook"><i class="fab
+fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab
+fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab
+fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab
+fa-linkedin-in"></i></a>
+            </div>
+            <p>© 2025 MIT Centro Médico. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para el Modo Oscuro/Claro
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.classList.add(savedTheme);
+            if (savedTheme === 'dark-mode') {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Icono de luna
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Icono de sol
+            }
+        } else {
+            body.classList.remove('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Icono de sol por defecto
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                localStorage.setItem('theme', 'light-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+
+        // --- JavaScript para la sección de Información del Paciente ---
+        // Base de datos de pacientes (SOLO PARA PROYECTO - ¡NO ES SEGURO PARA USO REAL!)
+        const pacientes = {
+            "juanperez": {
+                password: "mipass123",
+                nombre: "Juan Pérez",
+                citas: [
+                    "10/07/2025 - 10:00 AM - Dr. García (Clínico)",
+                    "25/07/2025 - 15:30 PM - Dra. López (Dermatología)"
+                ],
+                problemas: [
+                    "Dolor de cabeza ocasional",
+                    "Alergia a la penicilina"
+                ]
+            },
+            "mariasol": {
+                password: "clavemaria",
+                nombre: "María Sol Rodríguez",
+                citas: [
+                    "15/07/2025 - 09:00 AM - Dr. Fernández (Pediatría)",
+                    "01/08/2025 - 11:00 AM - Nutricionista (Control)"
+                ],
+                problemas: [
+                    "Asma infantil (control anual)",
+                    "Deficiencia de Vitamina D"
+                ]
+            },
+            "pedrog": {
+                password: "clavepedro",
+                nombre: "Pedro González",
+                citas: [
+                    "05/07/2025 - 14:00 PM - Laboratorio (Análisis de sangre)"
+                ],
+                problemas: [
+                    "Hipertensión arterial (medicación)",
+                    "Diabetes Tipo 2"
+                ]
+            },
+            // AÑADE EL NUEVO PACIENTE AQUÍ:
+            "pepito": {
+                password: "12345",
+                nombre: "Pepito Argento",
+                citas: [
+                    "14/03/2025 - 15:00 PM - Dr. House (Diagnóstico)" // Nueva cita
+                ],
+                problemas: [
+                    "Chequeo general"
+                ]
+            }
+            // Puedes agregar más usuarios aquí con su información
+        };
+
+        // Obtener elementos de la página
+        const loginSection = document.getElementById('login-section');
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginMessage = document.getElementById('loginMessage');
+        const infoPacienteDiv = document.getElementById('info-paciente');
+        const pacienteDataDiv = document.getElementById('paciente-data');
+        const btnLogout = document.getElementById('btnLogout');
+
+        // Función para inicializar la visibilidad
+        function initializePatientInfoSection() {
+            infoPacienteDiv.style.display = 'none'; // Ocultar la sección de información al cargar la página
+            loginSection.style.display = 'block'; // Mostrar el formulario de login por defecto
+            loginMessage.textContent = ''; // Limpiar mensajes de login
+            usernameInput.value = ''; // Limpiar campos
+            passwordInput.value = '';
+            pacienteDataDiv.innerHTML = ''; // Limpiar datos de paciente
+        }
+
+        // Lógica al enviar el formulario de login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Evita que la página se recargue
+
+            const user = usernameInput.value.toLowerCase().trim(); // Usuario en minúsculas y sin espacios
+            const pass = passwordInput.value.trim(); // Contraseña sin espacios
+
+            // Comprobar si el usuario existe y la contraseña coincide
+            if (pacientes[user] && pacientes[user].password === pass) {
+                // Credenciales correctas
+                loginSection.style.display = 'none'; // Ocultar el formulario de login
+                infoPacienteDiv.style.display = 'block'; // Mostrar la sección de información
+
+                mostrarInfoPaciente(pacientes[user]); // Cargar y mostrar los datos del paciente
+                loginMessage.textContent = ''; // Limpiar cualquier mensaje de error
+            } else {
+                // Credenciales incorrectas
+                loginMessage.textContent = 'Usuario o contraseña incorrectos.';
+            }
+        });
+
+        // Función para cargar y mostrar la información del paciente
+        function mostrarInfoPaciente(paciente) {
+            pacienteDataDiv.innerHTML = `
+                <h3>¡Hola, ${paciente.nombre}!</h3>
+
+                <h4>Tus Próximas Citas:</h4>
+                ${paciente.citas.length > 0 ?
+                    `<ul>${paciente.citas.map(cita => `<li>${cita}</li>`).join('')}</ul>` :
+                    '<p>No tienes citas programadas en este momento.</p>'
+                }
+
+                <h4>Tus Problemas de Salud (Registrados):</h4>
+                ${paciente.problemas.length > 0 ?
+                    `<ul>${paciente.problemas.map(problema => `<li>${problema}</li>`).join('')}</ul>` :
+                    '<p>No hay problemas de salud registrados.</p>'
+                }
+            `;
+        }
+
+        // Lógica del botón "Cerrar Sesión"
+        btnLogout.addEventListener('click', () => {
+            initializePatientInfoSection(); // Reinicia la sección
+            loginMessage.textContent = 'Sesión cerrada correctamente.'; // Mostrar un mensaje
+        });
+
+        // Al cargar la página, inicializar la sección de información del paciente
+        document.addEventListener('DOMContentLoaded', initializePatientInfoSection);
+    </script>
+</body>
+</html>
