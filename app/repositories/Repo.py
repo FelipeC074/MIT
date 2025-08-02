@@ -1,7 +1,8 @@
 import TableModels as TM
 from sqlalchemy.orm import Session
 from schemes import Schemas as S
-
+import pandas as pd
+#Hashear contraseñas
 class Repositorio:
     def __init__(self):
         pass
@@ -18,18 +19,23 @@ class Repositorio:
         db.commit()
         db.refresh(Consulta)
 
-    def readUs(self, user: S.User | bool = False, db:Session) -> S.User:
+    def readUs(self, user: S.User | bool = False, db:Session) -> S.User | pd.DataFrame:
         if user != False:
-           resp = db.query(TM.UserModel).where(name==user.name)
+           resp = db.query(TM.UserModel).filter_by(name=user.name).all()
+           Resp = dict(resp)
+           return Resp
         else: 
             resp = db.query(TM.UserModel).all()
-        #Transformacion de type(resp) a S.User
-        return Usuario
-    def readCons(self, user: S.User | bool = False, db:Session) -> S.User:
+            dfResp = pd.DataFrame(resp)
+            return dfResp
+
+    def readCons(self, cons: S.Consulta | bool = False, db:Session) -> S.Consulta | pd.DataFrame:
         if user != False:
-           resp = db.query(TM.UserModel).where(name==user.name)
+           resp = db.query(TM.ConsultasModel).where(id==cons.id)
+           resp = dict(resp)
+           return resp
         else: 
-            resp = db.query(TM.UserModel).all()
-        #Transformacion de type(resp) a S.User
-        return Usuario
+            resp = db.query(TM.ConsultasModel).all()
+            dfresp = pd.DataFrame(resp)
+            return dfresp
         

@@ -13,7 +13,7 @@ DBase.metadata.create_all(bind=Engine)
 if __name__ == "__main__":
     uvicorn.run(app="app.main:App", reload=True)
 
-def custom_openapi():
+"""def custom_openapi():
     if App.openapi_schema:
         return App.openapi_schema
 
@@ -39,4 +39,4 @@ def custom_openapi():
     App.openapi_schema = openapi_schema
     return App.openapi_schema
 
-App.openapi = custom_openapi
+App.openapi = custom_openapi"""
