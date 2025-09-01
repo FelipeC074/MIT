@@ -57,12 +57,15 @@ class Email_Serv():
 
         if not email_val:
             raise HTTPException(status_code= 400,detail="El email es invalido")
+            raise HTTPException(status_code= 400,detail="El email es invalido")
 
         #passwordEncode = jwt.encode({user.password}, SECRET,algorithm=["HS256"])
         crypted_password = crypt.hash(user.password, scheme="bcrypt")
         user.password = crypted_password
         self.Repo.createUs(user, db)
         return "Se ha registrado correctamente"
+
+
 
 
     #[]

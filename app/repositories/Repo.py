@@ -7,44 +7,59 @@ class Repositorio:
     def __init__(self):
         pass
 
-    def createUs(self, user: S.User, db: Session, UsModel: TM.UserModel = TM.UserModel()) -> None:
-        nuevo_user = TM.Usuario(nombre=user.name, password=user.password, email=user.email)
-        db.add(nuevo_user)
+    def createUs(self, user: S.User_DB, db: Session, UsModel: TM.UserModel = TM.UserModel()) -> None:
+        nuevo_usuario = TM.UserModel(name=user.name, password=user.password, email=user.email)
+        db.add(nuevo_usuario)
         db.commit()
-        db.refresh(nuevo_user)
+        db.refresh(nuevo_usuario)
 
-    def createCons(self, user: S.User, db:Session, horario, CoModel: TM.ConsultasModel = TM.ConsultasModel()) -> None:
-        nueva_cons = TM.Consulta(horario= horario, usuario= user.name)
-        db.add(nueva_cons)
+    def createCons(self, user: S.User_DB, db:Session, horario, CoModel: TM.ConsultasModel = TM.ConsultasModel()) -> None:
+        nuevo_cons = TM.ConsultasModel(horario= horario, usuario= user.name)
+        db.add(nuevo_cons)
         db.commit()
-        db.refresh(nueva_cons)
+        db.refresh(nuevo_cons)
 
     def readUs(self, db:Session, email: str) -> S.User_DB | None:
-           # db.get() returns a UserModel instance or None
-           user_db = db.get(TM.UserModel, email)
-           if user_db:
-            # Convert the SQLAlchemy model to a Pydantic model
-            return S.User_DB.model_validate(user_db)
-           return None
+           resp = db.get(TM.UserModel, email)
+           if not resp:
+            return resp
+           else:
+            Resp = S.User_DB.model_validate(resp)
+            return Resp
 
-    def readCons(self, db:Session, user: str, id: int = -1) -> list[S.Consulta] | S.Consulta | None:
-        # 1. Create the base query
-        query = db.query(TM.ConsultasModel).filter(TM.ConsultasModel.usuario == user)
-
-        # 2. If ID is specified, filter by it and get the first result
-        if id != -1:
-            # .first() executes the query and returns one model instance or None
-            consulta_db = query.filter(TM.ConsultasModel.id == id).first()
-            if consulta_db:
-                # Convert the single instance to a Pydantic model
-                return S.Consulta.model_validate(consulta_db)
-            return None
-        
-        # 3. If no ID, get all results
-        # .all() executes the query and returns a list of model instances
-        consultas_db = query.all()
-        if not consultas_db:
-            return None
-        
-        # Convert the list of instances to a list of Pydantic models
-        return [S.Consulta.model_validate(c) for c in consultas_db]
+    def readCons(self, db:Session, user: str,id: int = -1) -> S.Consulta | None:
+        resp = db.query(TM.ConsultasModel).where(TM.ConsultasModel.usuario==user)# El user es un email
+        if not resp:
+               return resp
+        if id == -1:
+           resp =  [S.Consulta.model_validate(consulta) for consulta in resp]
+           return resp
+        else:
+            resp = db.query(TM.ConsultasModel).where(TM.ConsultasModel.usuario==user, TM.ConsultasModel.id==id).first()
+            if not resp:
+                  return resp
+            resp = S.Consulta.model_validate(resp)
+            return resp
+    def updateUs(self, db:Session, email:str, new_data: S.User_DB) -> None:
+        user = db.get(TM.UserModel, email)
+        if user:
+            user.name = new_data.name
+            user.password = new_data.password
+            db.commit()
+            db.refresh(user)
+    def updateCons(self, db:Session, id:int, new_data: S.Consulta) -> None:
+        cons = db.get(TM.ConsultasModel, id)
+        if cons:
+            cons.horario = new_data.horario
+            db.commit()
+            db.refresh(cons) 
+    def deleteUs(self, db:Session, email:str) -> None:
+        user = db.get(TM.UserModel, email)
+        if user:
+            db.delete(user)
+            db.commit()
+    def deleteCons(self, db:Session, id:str) -> None:
+        cons = db.get(TM.ConsultasModel, id)
+        if cons:
+            db.delete(cons)
+            db.commit()

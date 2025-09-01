@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from enum import Enum
-
+from datetime import date
 class User(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     name: str
@@ -12,7 +12,7 @@ class User_DB(User):
 class Consulta(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    horario: str # Time
+    horario: date # Time
     user: str
     
 class ConfirmResponse(str, Enum):

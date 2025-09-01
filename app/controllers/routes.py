@@ -1,6 +1,8 @@
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import Request, APIRouter, status, Depends, HTTPException, Cookie 
+from fastapi import Request, APIRouter, status, Depends, HTTPException, Cookie 
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
 
@@ -8,8 +10,13 @@ from app.repositories.DataBase import Get_db
 from app.schemes import Schemas as S
 from app.services.Email import Email_Serv
 
+from app.repositories.DataBase import Get_db
+from app.schemes import Schemas as S
+from app.services.Email import Email_Serv
+
 router = APIRouter(responses={status.HTTP_404_NOT_FOUND: {"message":"No Encontrado"}}) 
 Service = Email_Serv()
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl="portal-paciente.html")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="portal-paciente.html")
 templates = Jinja2Templates(directory="app/controllers/templates")
 
