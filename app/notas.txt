@@ -1,2 +1,24 @@
 _Cookies y LogIn
 _Base de Datos, correcto almacenamiento en server production y seguridad en su apertura
+
+Host (Anfitrión)
+El Host (o anfitrión) se refiere a la computadora o dispositivo físico o virtual en el que se ejecuta un programa o servicio.
+
+En la web, el Host tiene una dirección única, que puede ser un nombre de dominio (ej. midominio.com) o una dirección IP (ej. 127.0.0.1 o 0.0.0.0).
+
+Cuando configuras un servidor, el host es la dirección a la que "se enlaza" para escuchar peticiones.
+
+Server (Servidor)
+El Server (o programa servidor) es el programa de software que espera y responde a las peticiones de los clientes (como navegadores web).
+
+Su función principal es escuchar en una dirección y puerto específicos del Host, procesar las peticiones (HTTP, por ejemplo) y enviar la respuesta adecuada.
+
+Puede ser un servidor de aplicaciones (como Uvicorn, Gunicorn, Apache) o un servidor web (como Nginx, Apache HTTP Server).
+
+Proxy
+Un Proxy es un servidor que actúa como un intermediario para peticiones de clientes que buscan recursos de otros servidores.
+
+Proxy Adelante (Forward Proxy): Un cliente lo usa para acceder a recursos externos (oculta la identidad del cliente).
+
+Proxy Inverso (Reverse Proxy): Recibe peticiones de Internet en nombre de uno o más Servidores (oculta la identidad del servidor/es de aplicación).
+Es muy común para seguridad (manejar HTTPS), balanceo de carga y servir archivos estáticos.

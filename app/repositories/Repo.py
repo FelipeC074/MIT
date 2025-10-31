@@ -40,6 +40,7 @@ class Repositorio:
                   return resp
             resp = S.Consulta.model_validate(resp)
             return resp
+        
     def updateUs(self, db:Session, email:str, new_data: S.User_DB) -> None:
         user = db.get(TM.UserModel, email)
         if user:

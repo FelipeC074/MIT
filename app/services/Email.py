@@ -12,6 +12,7 @@ from passlib.context import CryptContext
 from datetime import datetime,timedelta, timezone
 import jwt
 from jwt import PyJWTError
+
 import os
 from dotenv import load_dotenv
 
@@ -45,7 +46,9 @@ class Email_Serv():
               raise False
         else:
               return True
-
+    def MakeCons(cons: S.Consulta) -> str:
+        HTMLCons = f"<p>{cons.user}, tenes una consulta el dia {cons.horario}</p> \n"
+        return HTMLCons
 
 
 
@@ -64,10 +67,6 @@ class Email_Serv():
         user.password = crypted_password
         self.Repo.createUs(user, db)
         return "Se ha registrado correctamente"
-
-
-
-
     #[]
     def LogIn(self, user: OAuth2PasswordRequestForm, db: Session) -> HTTPException | dict:
       
@@ -104,8 +103,14 @@ class Email_Serv():
         if not self.Repo.readUs(db, user.email):
             raise HTTPException(status_code =404,detail="El usuario no existe")
         
-        Consultas = self.Repo.readCons(db, user.email)
-        return Consultas
+        Consultas: list[S.Consulta] = self.Repo.readCons(db, user.email)
+        if Consultas == None:
+            return "<p>No tenes consultas agendadas</p>" 
+        
+        ConsultasHTML = ""
+        for cons in Consultas:
+            ConsultasHTML: str = ConsultasHTML + self.MakeCons(cons)
+        return ConsultasHTML
     
     def UpdateUser(self, user: S.User_DB, new_data: S.User_DB, db: Session) -> HTTPException | None:
         if not self.Repo.readUs(db, user.email):

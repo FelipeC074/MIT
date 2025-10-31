@@ -1,26 +1,14 @@
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from fastapi import Request, APIRouter, status, Depends, HTTPException, Cookie 
-from fastapi import Request, APIRouter, status, Depends, HTTPException, Cookie 
+from fastapi import Request, APIRouter, status, Depends, HTTPException, Cookie
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
 
 from app.repositories.DataBase import Get_db
 from app.schemes import Schemas as S
 from app.services.Email import Email_Serv
+from app.controllers.middleware import Middleware
 
-from app.repositories.DataBase import Get_db
-from app.schemes import Schemas as S
-from app.services.Email import Email_Serv
-
-router = APIRouter(responses={status.HTTP_404_NOT_FOUND: {"message":"No Encontrado"}}) 
-Service = Email_Serv()
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl="portal-paciente.html")
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl="portal-paciente.html")
-templates = Jinja2Templates(directory="app/controllers/templates")
-
-#: str = Depends(oauth2_bearer)
 def security_bearer(request: Request, db: Session = Depends(Get_db)) -> HTTPException | S.User_DB: #Funcion de barrera 
     token_cookie = request.cookies.get("access_token")  #Obtenemos el token de las cookies
     if not token_cookie:
@@ -33,6 +21,15 @@ def security_bearer(request: Request, db: Session = Depends(Get_db)) -> HTTPExce
     user = Service.Bearer(token, db)
     return user                                                  #Si el usuario si existe 
 
+origins = ["*"]   #Cambiar en producción, metodo https, dominios específicos
+
+router = APIRouter(responses={status.HTTP_404_NOT_FOUND: {"message":"No Encontrado"}}) 
+
+Service = Email_Serv()
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl="portal-paciente.html")
+templates = Jinja2Templates(directory="app/controllers/templates")
+
+#: str = Depends(oauth2_bearer)
 @router.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -109,10 +106,15 @@ def Registr(user: S.User_DB, request:Request, db: Session = Depends(Get_db)):
 
 #if not None == True
 @router.get("/info-paciente.html", response_class=HTMLResponse)
-def Notif(request: Request, user: S.User_DB = Depends(security_bearer), db: Session = Depends(Get_db)): #Aquí veremos nuestras notificaciones
-    return templates.TemplateResponse("info-paciente.html", {"request": request})
+def Notif(request: Request,user = Depends(security_bearer), db: Session = Depends(Get_db)): #Aquí veremos nuestras notificaciones
+    return templates.TemplateResponse("info-paciente.html", {"request": request,"consultas": Service.InfoUser(user, db)})#Trae todos los datos de las consultas del usuario
 
-#Consultas = Service.InfoUser(user, db) #Trae todos los datos de las consultas del usuario
-
-    #if isinstance(Consultas, HTTPException):
-    #    raise Consultas
+@router.get("/newCons.html", response_class=HTMLResponse)
+def show_Cons_Form(request: Request,user = Depends(security_bearer),db: Session = Depends(Get_db)): #Aquí ongresaremos los datos de una nueva consulta
+    
+    return templates.TemplateResponse("newCons.html", {"request": request})
+ 
+@router.post("/newCons.html", response_class=HTMLResponse)
+def send_NewCons(request: Request,user = Depends(security_bearer), db: Session = Depends(Get_db)): #Aquí recibiremos los datos de una nueva consulta
+    form = request.form()
+    return templates.TemplateResponse("newCons.html", {"request": request}) 

@@ -3,11 +3,12 @@ sys.path.append(".")
 
 import uvicorn
 from fastapi import FastAPI
-from app.controllers.routes import router
+from app.controllers.routes import router,Middleware
 from app.repositories.DataBase import DBase, Engine
 
 App = FastAPI()
 App.include_router(router)
+App.add_middleware(Middleware)
 DBase.metadata.create_all(bind=Engine)
 
 if __name__ == "__main__":

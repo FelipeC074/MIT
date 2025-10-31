@@ -9,16 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 passwordDB = os.getenv("passwordDB")
 
-"""url = URL.create(
-    drivername="postgresql",
-    username="postgres",
-    password=passwordDB,
-    host="localhost",
-    port=5432,
-    database="MIT" # Cambiar por el nombre de la base de datos
-)"""
-
-DB_URL = "sqlite:///./DBase.db"  #Debe protegerse la URL de la DB?
+DB_URL = "sqlite:///./DBase.db"  #Debe protegerse la URL de la DB
 
 Engine = create_engine(DB_URL)
 
